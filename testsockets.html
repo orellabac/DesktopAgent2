@@ -1,0 +1,99 @@
+
+<!doctype html>
+<style>
+    textarea { vertical-align: bottom; }
+    #output { overflow: auto; }
+    #output > p { overflow-wrap: break-word; }
+    #output span { color: blue; }
+    #output span.error { color: red; }
+</style>
+<h2>DesktopAgent2 Test</h2>
+<p>
+    This sample page connects to a DesktopAgent2 and allows the execution of some tests
+</p>
+
+<button onclick="doConnect()"> Connect </button>
+
+<button onclick="doGetComputerName()"> Get Computer Name </button>
+
+<button onclick="doStartWord()"> Start Word </button>
+
+<button onclick="doStartExcel()"> Start Excel </button>
+
+<button onclick="doStartExcel()"> Run Program </button>
+
+
+<div id=output>NOT CONNECTED</div>
+<script>
+
+    function DesktopAgent2Client() 
+    {
+        this.wsUri = "ws://127.0.0.1:996/";
+        this.websocket = undefined;
+        this.OnConnected = function(e) {};
+        this.OnClosed = function(e) {};
+        this.Close = function(code, reason) {
+            websocket.close(code, reason);
+        };
+        this.Send = function(data)
+        {
+            var that = this;
+            return new Promise(function(resolve, reject)
+            {
+                that.websocket.onmessage = function(e) {
+                    resolve(e);
+                };
+                that.websocket.send(data);
+                that.websocket.onerror = function(err) {
+                    reject(err);
+                };
+            });
+        };
+
+        this.Start = function(uri)
+        {
+            var that = this;
+            this.wsUri = uri || this.wsUri;
+            this.websocket = new WebSocket(this.wsUri);
+            this.websocket.onclose = function(e) { 
+                if (that.OnClosed) that.OnClosed(e); 
+            }
+            this.websocket.onmessage = function(e) {
+                this.ProcessMessage(e);
+            }
+            return new Promise(function(resolve, reject)
+            {
+                that.websocket.onopen = function(e) { 
+                    resolve(this);
+                };
+                that.websocket.onerror = function(err) {
+                    reject(err);
+                }
+            });
+        }
+
+        
+    }
+
+    var agent = new DesktopAgent2Client();
+
+    function doConnect() {
+        agent.OnClosed = function() {
+            document.getElementById('output').innerText = "NOT CONNECTED";
+        }
+        agent.Start().then(function() {
+            document.getElementById('output').innerText = "CONNECTED";
+        })
+    }
+
+    function doStartExcel() {
+        var msg = {'action':'Excel','command':'open'};
+        agent.Send(JSON.stringify(msg)).then(function() {
+            alert('excel was opened');
+        })
+    }
+
+    function doStartWord() {
+        
+    }
+</script>
