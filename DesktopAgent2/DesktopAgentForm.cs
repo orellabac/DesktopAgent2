@@ -260,7 +260,8 @@ namespace DesktopAgent
         private void SetupServer()
         {
             lblStatus.Text = "0 clients connected";
-            var server = new WebSocketServer("ws://127.0.0.1:996");
+            var server = new WebSocketServer("wss://0.0.0.0:996");
+            server.Certificate = new System.Security.Cryptography.X509Certificates.X509Certificate2(@"M:\Program Files\OpenSSL-Win64\bin\secondtest.pfx", "test");
             server.Start(c =>
             {
                 c.OnOpen = () =>

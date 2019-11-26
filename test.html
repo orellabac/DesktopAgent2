@@ -1,34 +1,38 @@
+<html>
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <style>
+        textarea { vertical-align: bottom; }
+        #output { overflow: auto; }
+        #output > p { overflow-wrap: break-word; }
+        #output span { color: blue; }
+        #output span.error { color: red; }
+    </style>
+    <title>Desktop Agent Tests</title>
+</head>
+<body>
+<div class="container">
+        <div class="jumbotron">
+            <h1>DesktopAgent2 Test</h1>
+            <p class="lead">
+                This sample page connects to a DesktopAgent2 and allows the execution of some tests
+            </p>
+        </div>
 
-<!doctype html>
-<style>
-    textarea { vertical-align: bottom; }
-    #output { overflow: auto; }
-    #output > p { overflow-wrap: break-word; }
-    #output span { color: blue; }
-    #output span.error { color: red; }
-</style>
-<h2>DesktopAgent2 Test</h2>
-<p>
-    This sample page connects to a DesktopAgent2 and allows the execution of some tests
-</p>
+        <div class="btn-group-vertical">        
+            <button type="button" class="btn btn-primary" onclick="doConnect()"> Connect </button>
+            <button type="button" class="btn btn-primary" onclick="doGetComputerName()"> Get Computer Name </button>
+            <button type="button" class="btn btn-primary" onclick="doStartWord()"> Start Word </button>
+            <button type="button" class="btn btn-primary" onclick="doStartExcel()"> Start Excel </button>
+            <button type="button" class="btn btn-primary" onclick="doStartExcel()"> Run Program </button>
+        </div>
 
-<button onclick="doConnect()"> Connect </button>
-
-<button onclick="doGetComputerName()"> Get Computer Name </button>
-
-<button onclick="doStartWord()"> Start Word </button>
-
-<button onclick="doStartExcel()"> Start Excel </button>
-
-<button onclick="doStartExcel()"> Run Program </button>
-
-
-<div id=output>NOT CONNECTED</div>
+<p>STATUS: <div class="badge badge-info" id=output>NOT CONNECTED</div></p>
 <script>
 
     function DesktopAgent2Client() 
     {
-        this.wsUri = "ws://127.0.0.1:996/";
+        this.wsUri = "wss://localhost:996/";
         this.websocket = undefined;
         this.OnConnected = function(e) {};
         this.OnClosed = function(e) {};
@@ -86,14 +90,29 @@
         })
     }
 
+    function doGetComputerName() {
+        var msg = {'action':'WSH','command':'ComputerName'};
+        agent.Send(JSON.stringify(msg)).then(function(e) {
+            var data = JSON.parse(e.data);
+            alert("Computer Name is " + data.result);
+        });
+    }
+
+
     function doStartExcel() {
         var msg = {'action':'Excel','command':'open'};
         agent.Send(JSON.stringify(msg)).then(function() {
             alert('excel was opened');
-        })
+        });
     }
 
     function doStartWord() {
-        
+        var msg = {'action':'Word','command':'open'};
+        agent.Send(JSON.stringify(msg)).then(function() {
+            alert('word was opened');
+        });
     }
 </script>
+</div>
+</body>
+</html>
