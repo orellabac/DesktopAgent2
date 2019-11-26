@@ -4,7 +4,7 @@ The Web keeps progressing and each day there are more things you can do from a b
 
 However, sometimes you need to access things that are only on the machine where your browser is running. For example, opening local office apps or accessing local devices.
 
-![BeforeDesktopAgent](Images\BeforeDesktopAgent2.png)
+![BeforeDesktopAgent](Images/BeforeDesktopAgent2.png)
 
 Some time ago I had provided a similar project called [DesktopAgent](https://github.com/orellabac/WebMap.DesktopAgent). That project works fine but there were some lessons learned from it:
 
@@ -21,7 +21,7 @@ So I decided to switch for an implementation based on WebSockets.
 
 Ok, all those learned lessons bring then DesktopAgent2.
 
-![AfterDesktopAgent](Images\AfterDesktopAgent2.png)
+![AfterDesktopAgent](Images/AfterDesktopAgent2.png)
 
 Desktop Agent2 is a simple template to help you get started on creating your DesktopAgent. 
 DesktopAgent2 targets .NET Framework 4.5, so it can be used even from Windows 7.
@@ -36,14 +36,14 @@ Testing
 
 If you just want to test *DesktopAgent2* you can build it from source of download the binary from the Releases link.
 
-First you need to run the Agent ![Desktop Agent](Images\DesktopAgent2.png)
+First you need to run the Agent ![Desktop Agent](Images/DesktopAgent2.png)
 
 Next open the `test.html' page.
-![TestPage](Images\testpage.png)
+![TestPage](Images/testpage.png)
 
 When you press connect, the page will send a connection request to the agent. Once connected the agent will indicate that it has a new client
 
-![One client](Images\AgentWithClient.png)
+![One client](Images/AgentWithClient.png)
 
 Now you can press the test buttons. For example press `Start Word`
 
