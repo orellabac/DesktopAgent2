@@ -9,6 +9,7 @@
         #output span.error { color: red; }
     </style>
     <title>Desktop Agent Tests</title>
+    <script src="jquery-1.6.1.min.js"></script>
 </head>
 <body>
 <div class="container">
@@ -32,7 +33,7 @@
 
     function DesktopAgent2Client() 
     {
-        this.wsUri = "wss://localhost:996/";
+        this.wsUri = "ws://localhost:996/";
         this.websocket = undefined;
         this.OnConnected = function(e) {};
         this.OnClosed = function(e) {};
@@ -42,16 +43,16 @@
         this.Send = function(data)
         {
             var that = this;
-            return new Promise(function(resolve, reject)
-            {
-                that.websocket.onmessage = function(e) {
-                    resolve(e);
-                };
-                that.websocket.send(data);
-                that.websocket.onerror = function(err) {
-                    reject(err);
-                };
-            });
+            var defer = $.Deferred();
+            
+            that.websocket.onmessage = function(e) {
+                defer.resolve(e);
+            };
+            that.websocket.send(data);
+            that.websocket.onerror = function(err) {
+                defer.reject(err);
+            };
+            return defer;
         };
 
         this.Start = function(uri)
@@ -65,15 +66,16 @@
             this.websocket.onmessage = function(e) {
                 this.ProcessMessage(e);
             }
-            return new Promise(function(resolve, reject)
-            {
-                that.websocket.onopen = function(e) { 
-                    resolve(this);
-                };
-                that.websocket.onerror = function(err) {
-                    reject(err);
-                }
-            });
+            
+            var defer = $.Deferred();
+            that.websocket.onopen = function(e) { 
+                defer.resolve(this);
+            };
+            that.websocket.onerror = function(err) {
+                defer.reject(err);
+            }
+            
+            return defer;
         }
 
         
