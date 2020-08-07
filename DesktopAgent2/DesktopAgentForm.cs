@@ -261,7 +261,7 @@ namespace DesktopAgent
         {
             lblStatus.Text = "0 clients connected";
             var server = new WebSocketServer("wss://0.0.0.0:996");
-            server.Certificate = new System.Security.Cryptography.X509Certificates.X509Certificate2(@"C:\junk\certificate\powershellcert.pfx", "password1234");
+            server.Certificate = new System.Security.Cryptography.X509Certificates.X509Certificate2(@".\powershellcert.pfx", "password1234");
             server.Start(c =>
             {
                 c.OnOpen = () =>

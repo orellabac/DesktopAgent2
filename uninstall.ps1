@@ -1,0 +1,1 @@
+Get-ChildItem Cert:\LocalMachine\Root\49F7CBCF859E1DCAC93D9A6CF198EF5D4AEAA606 | Remove-Item
